@@ -4,15 +4,16 @@ include_once './config/connexion.php';
 include_once './config/autoload.php';
 
 $heroManager = new HeroesManager($connexion);
-if (!empty($_POST['name'])) {
+if (!empty($_POST['name']) && !empty($_POST['type'])) {
 
 
-    $hero = new Hero($_POST['name'], 100);
-
+    if (class_exists($_POST['type'])) {
+        $hero = new $_POST['type']($_POST['name'], 100);
+    }else{
+        throw new Exception("Y'a pas mec", 1);
+    }
 
     $heroManager->add($hero);
-
-    
     
 }
 $heroes = $heroManager->findAllAlive();
@@ -63,6 +64,11 @@ $heroes = $heroManager->findAllAlive();
         <form action="" class="d-flex flex-column align-items-center" method="post">
             <label for="" class="m-2"> Créer un héro</label>
             <input type="text" class="m-2" name="name" placeholder="Nom du hero">
+            <select name="type" id="type">
+                <option value="Guerrier">Guerrier</option>
+                <option value="Archer">Archer</option>
+                <option value="Mage">Mage</option>
+            </select>
             <button class="btn btn-danger" type="submit"> Créer le hero</button>
         </form>
     </section>
@@ -75,6 +81,7 @@ $heroes = $heroManager->findAllAlive();
             <img src="https://www.smashbros.com/assets_v2/img/fighter/toon_link/main.png" class="card-img-top w-75 mx-auto" alt="...">
             <div class="card-body">
                 <h5 class="card-title text-center m-2"><?= $hero->getName() ?></h5>
+                <p class="card-title text-center m-2"><?= $hero->getType() ?></p>
 
                 <div class="progress m-2" role="progressbar" aria-label="Danger example" aria-valuenow="<?= $hero->getHp() ?>" aria-valuemin="0" aria-valuemax="100">
                     <div class="progress-bar bg-danger" style="width: <?= $hero->getHp() ?>%"><?= $hero->getHp() ?>%</div>

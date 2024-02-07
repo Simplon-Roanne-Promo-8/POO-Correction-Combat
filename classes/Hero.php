@@ -1,24 +1,28 @@
 <?php
 
 
-class Hero {
+abstract class Hero {
 
     private int $id;
     private string $name;
     private int $hp;
+    private string $type;
 
     public function __construct($name, $hp)
     {
         $this->name = $name;
         $this->hp = $hp;
+        $this->type = get_class($this);
     }
 
     public function hit(Monster $monster, $damage){
         $monster->setHp($monster->getHp() - $damage);
     }
 
+    abstract public function specialHit(Monster $monster, $damage);
+
     // GETTER
-    public function getid(){
+    public function getId(){
         return $this->id;
     }  
 
@@ -28,6 +32,10 @@ class Hero {
 
     public function getHp(){
         return $this->hp;
+    }    
+
+    public function getType(){
+        return $this->type;
     }    
     
     // SETTER 
@@ -42,6 +50,8 @@ class Hero {
     public function setHp($hp){
         $this->hp = $hp;
     }
-}
 
-new Hero('Toto', 100);
+    public function setType($type){
+        $this->type = $type;
+    }
+}

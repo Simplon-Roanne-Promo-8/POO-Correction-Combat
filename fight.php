@@ -10,8 +10,8 @@ $hero = $heroManager->find($_GET['hero_id']);
 $fightManager = new FightManager();
 $monster = $fightManager->createMonster();
 
-$resultFight = $fightManager->fight($hero, $monster)
-
+$resultFight = $fightManager->fight($hero, $monster);
+$heroManager->update($hero);
 
 // var_dump($hero);
 // var_dump($monster);
@@ -40,7 +40,7 @@ $resultFight = $fightManager->fight($hero, $monster)
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                            <a class="nav-link active" aria-current="page" href="./index.php">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Features</a>

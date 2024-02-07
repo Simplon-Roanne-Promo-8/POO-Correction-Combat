@@ -12,10 +12,11 @@ class HeroesManager {
     public function add(Hero $hero){
         // Prepare et execute pour créer le hero
 
-        $preparedRequest = $this->connexion->prepare('INSERT INTO heroes (name) VALUES (?)');
+        $preparedRequest = $this->connexion->prepare('INSERT INTO heroes (name, type) VALUES (?, ?)');
         
         $preparedRequest->execute([
-            $hero->getName()
+            $hero->getName(),
+            $hero->getType()
         ]);
 
         $id = $this->connexion->lastInsertId();
@@ -30,9 +31,11 @@ class HeroesManager {
         $heroesArray = $preparedRequest->fetchAll(PDO::FETCH_ASSOC);
         $heroes = [];
         foreach ($heroesArray as $heroArray) {
-            $hero = new Hero($heroArray['name'], $heroArray['health_point']);
-            $hero->setId($heroArray['id']);
-            array_push($heroes, $hero);
+            if (class_exists($heroArray['type'])) {
+                $hero = new $heroArray['type']($heroArray['name'], $heroArray['health_point']);
+                $hero->setId($heroArray['id']);
+                array_push($heroes, $hero);
+            }
         }
 
         return $heroes;
@@ -47,7 +50,7 @@ class HeroesManager {
 
         $heroArray = $preparedRequest->fetch(PDO::FETCH_ASSOC);
 
-        $hero = new Hero($heroArray['name'], $heroArray['health_point']);
+        $hero = new $heroArray['type']($heroArray['name'], $heroArray['health_point']);
         $hero->setId($heroArray['id']);
 
 
@@ -58,6 +61,10 @@ class HeroesManager {
 
 
     public function update(Hero $hero){
-
+        $preparedRequest = $this->connexion->prepare('UPDATE heroes SET health_point = ? WHERE id = ?');
+        $preparedRequest->execute([
+            $hero->getHp(),
+            $hero->getId()
+        ]);
     }
 }
