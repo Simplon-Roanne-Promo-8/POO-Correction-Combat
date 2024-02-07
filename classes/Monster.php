@@ -21,7 +21,6 @@ abstract class Monster {
         $hero->setHp($hero->getHp() - $damage );
     }
 
-
     public function getName(){
         return $this->name;
     }    
@@ -45,6 +44,14 @@ abstract class Monster {
 
     public function setType($type){
         $this->type = $type;
+    }
+
+    public function toArray(){
+        return [
+            'name' => $this->getName(),
+            'hp' => $this->getHp(),
+            'type' => $this->getType(),
+        ];
     }
 
 }

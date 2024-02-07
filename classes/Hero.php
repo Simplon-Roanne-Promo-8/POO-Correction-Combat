@@ -54,4 +54,13 @@ abstract class Hero {
     public function setType($type){
         $this->type = $type;
     }
+
+    public function toArray(){
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'hp' => $this->getHp(),
+            'type' => $this->getType(),
+        ];
+    }
 }
